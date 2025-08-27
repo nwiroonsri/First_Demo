@@ -11,68 +11,24 @@ library(shiny)
 data(AirPassengers)
 
 # UI ----
-
-ui <- fluidPage(
+ui2 <- fluidPage(
   
   # App title ----
-  titlePanel("Clustering via Cluster Validity Indices by Nathakhun Wiroonsri"),
+  titlePanel("Forecasting Sandbox"),
   sidebarLayout(
     
     sidebarPanel(width = 3,
-                 selectInput(inputId = "clus_alg",
-                             label = "Select Clustering Algorithm",
-                             choices = c("K-Means", "Hierarchical Clustering", "Fuzzy C-Means"),
-                             selected = "K-Means"),
+                 selectInput(inputId = "model",
+                             label = "Select Model",
+                             choices = c("Linear Regression", "ARIMA", "Holt-Winters"),
+                             selected = "Linear Regression"),
                  # Linear Regression model arguments
-                 conditionalPanel(condition = "input.clus_alg == 'K-Means'",
-                                  checkboxGroupInput(inputId = "KM_args", 
-                                                     label = "Select Clustering Features:", 
-                                                     choices = list("Traditional" = 1, 
-                                                                    "Bayesian" = 2),
-                                                     selected = 1),
-                                  numericInput(inputId = "kmax",
-                                              label = "Kmax:",
-                                              min = 2,
-                                              max = 20,
-                                              value = 10,
-                                              step = 1),
-                                  sliderInput(inputId = "k1",
-                                              label = "1st Preferred K (<= Kmax)",
-                                              min = 2,
-                                              max = 20,
-                                              value = c(2,3),
-                                              step = 1),
-                                  sliderInput(inputId = "kl1",
-                                              label = "Level of Preference",
-                                              min = 1,
-                                              max = 3,
-                                              value = 3,
-                                              step = 1),
-                                  sliderInput(inputId = "k2",
-                                              label = "2nd Preferred K (<= Kmax)",
-                                              min = 2,
-                                              max = 20,
-                                              value = c(2,3),
-                                              step = 1),
-                                  sliderInput(inputId = "kl2",
-                                              label = "Level of Preference",
-                                              min = 1,
-                                              max = 3,
-                                              value = 2,
-                                              step = 1),
-                                  sliderInput(inputId = "k3",
-                                              label = "3rd Preferred K (<= Kmax)",
-                                              min = 2,
-                                              max = 20,
-                                              value = c(2,3),
-                                              step = 1),
-                                  sliderInput(inputId = "kl3",
-                                              label = "Level of Preference",
-                                              min = 1,
-                                              max = 3,
-                                              value = 1,
-                                              step = 1)
-                                  ),
+                 conditionalPanel(condition = "input.model == 'Linear Regression'",
+                                  checkboxGroupInput(inputId = "lm_args", 
+                                                     label = "Select Regression Features:", 
+                                                     choices = list("Trend" = 1, 
+                                                                    "Seasonality" = 2),
+                                                     selected = 1)),
                  # ARIMA model arguments
                  conditionalPanel(condition = "input.model == 'ARIMA'",
                                   h5("Order Parameters"),
@@ -143,16 +99,8 @@ ui <- fluidPage(
   )
 )
 
-
 # Define server logic required to draw a histogram ----
-server <- function(input, output) {
-  
-  kl1 <- c("Low", "Medium", "High")
-  
-  output$kl1 <- renderText({
-    paste("You selected:", kl1[input$kl1])
-  })
-  
+server2 <- function(input, output) {
   # Load the dataset a reactive object
   d <- reactiveValues(df = data.frame(input = as.numeric(AirPassengers), 
                                       index = seq.Date(from = as.Date("1949-01-01"),
@@ -288,4 +236,4 @@ server <- function(input, output) {
 }
 
 # Create Shiny app ----
-shinyApp(ui = ui, server = server)
+shinyApp(ui = ui2, server = server2)
