@@ -11,7 +11,7 @@ library(shiny)
 data(AirPassengers)
 
 # UI ----
-ui2 <- fluidPage(
+ui <- fluidPage(
   
   # App title ----
   titlePanel("Forecasting Sandbox"),
@@ -100,7 +100,7 @@ ui2 <- fluidPage(
 )
 
 # Define server logic required to draw a histogram ----
-server2 <- function(input, output) {
+server <- function(input, output) {
   # Load the dataset a reactive object
   d <- reactiveValues(df = data.frame(input = as.numeric(AirPassengers), 
                                       index = seq.Date(from = as.Date("1949-01-01"),
@@ -236,4 +236,4 @@ server2 <- function(input, output) {
 }
 
 # Create Shiny app ----
-shinyApp(ui = ui2, server = server2)
+shinyApp(ui = ui, server = server)
