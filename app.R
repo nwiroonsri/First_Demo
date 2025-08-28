@@ -398,7 +398,8 @@ observeEvent(input$pushstart, {
      ww = Wvalid(dats, kmax = input$kmax)
      res = kmeans(dat,ww$NCI[which.max(ww$NCI[,2]),1],nstart = 100)
       output$fc_plot <- renderPlot({
-        plot(dat,col = res$cluster) 
+        cols = rainbow(input$kmax)
+        plot(dat,col = cols[res$cluster])
       })
    } else if (input$clus_alg == "K-Means" && input$cvi_opt == "Bayesian"){
      aa = rep(1,input$kmax-1)
@@ -408,7 +409,8 @@ observeEvent(input$pushstart, {
      ww = B_Wvalid(dats, kmax = input$kmax, alpha = aa)
      res = kmeans(dat,ww$BCVI[which.max(ww$BCVI[,2]),1],nstart = 100)
      output$fc_plot <- renderPlot({
-       plot(dat,col = res$cluster) 
+       cols = rainbow(input$kmax)
+       plot(dat,col = cols[res$cluster]) 
      })
   }
 })
