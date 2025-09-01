@@ -254,6 +254,18 @@ ui <- fluidPage(
   titlePanel("Clustering via Cluster Validity Indices by Nathakhun Wiroonsri"),
   sidebarLayout(
     sidebarPanel(width = 3,
+                 fileInput("file1", "Upload CSV File",
+                           accept = c(
+                             "text/csv",
+                             "text/comma-separated-values,text/plain",
+                             ".csv"
+                           )),
+                 checkboxInput("header", "Header", TRUE),
+                 radioButtons("sep", "Separator",
+                              choices = c(Comma = ",",
+                                          Semicolon = ";",
+                                          Tab = "\t"),
+                              selected = ","),
                  selectInput(inputId = "clus_alg",
                              label = "Select Clustering Algorithm",
                              choices = c("K-Means", "Hierarchical Clustering", "Fuzzy C-Means"),
@@ -374,7 +386,9 @@ ui <- fluidPage(
       h3(textOutput("caption")),
       
       # Output: Plot of the requested variable against mpg ----
-      plotOutput("fc_plot", width = "600px", height = "600px")
+      plotOutput("fc_plot", width = "600px", height = "600px"),
+      
+      tableOutput("contents")
       
     )
   )
@@ -383,6 +397,17 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram ----
 server <- function(input, output) {
+  
+  
+  output$contents <- renderTable({
+    req(input$file1)  # ensure file is uploaded
+    
+    # Read the uploaded CSV
+    read.csv(input$file1$datapath,
+             header = input$header,
+             sep = input$sep)
+  })
+  
   dat = R1_data[,-3]
   dats = scale(dat)
   
