@@ -122,7 +122,7 @@ ui <- fluidPage(
                                               min = 0,
                                               max = 4,
                                               value = c(2,4),
-                                              step = 0.5),
+                                              step = 0.2),
                                   numericInput(inputId = "fc2",
                                                label = "Credit:",
                                                min = 1,
